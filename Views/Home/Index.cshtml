@@ -8,53 +8,53 @@
     <div>
         <div class="page-eyebrow">SMART REPAIR MANAGEMENT</div>
         <h1>Dashboard</h1>
-        <p>Acompanhe a operação da sua oficina num só lugar.</p>
+        <p>Acompanhe com dados reais da oficina.</p>
     </div>
-    <span class="outline-badge"><i class="ti ti-database"></i> Dados reais, sem demonstração</span>
+    <span class="outline-badge"><i class="ti ti-database"></i> Dados reais da base de dados</span>
 </div>
 
 <section aria-labelledby="indicators-title">
     <div class="section-heading">
         <div>
             <h2 id="indicators-title">Indicadores principais</h2>
-            <p>Valores apresentados quando o cálculo com dados reais for implementado.</p>
+            <p>Valores calculados sobre os registos concretos da aplicação.</p>
         </div>
     </div>
     <div class="metric-grid">
         <article class="metric-card">
             <span class="metric-icon blue"><i class="ti ti-users"></i></span>
             <span class="metric-label">Total de clientes</span>
-            <strong class="metric-value">@(Model.TotalClientes?.ToString() ?? "—")</strong>
+            <strong class="metric-value">@(Model.TotalClientes?.ToString() ?? "0")</strong>
             <span class="metric-note">Registos na base de dados</span>
         </article>
         <article class="metric-card">
             <span class="metric-icon cyan"><i class="ti ti-device-laptop"></i></span>
             <span class="metric-label">Equipamentos</span>
-            <strong class="metric-value">@(Model.TotalEquipamentos?.ToString() ?? "—")</strong>
+            <strong class="metric-value">@(Model.TotalEquipamentos?.ToString() ?? "0")</strong>
             <span class="metric-note">Equipamentos registados</span>
         </article>
         <article class="metric-card">
             <span class="metric-icon green"><i class="ti ti-user-cog"></i></span>
             <span class="metric-label">Técnicos ativos</span>
-            <strong class="metric-value">@(Model.TotalTecnicosAtivos?.ToString() ?? "—")</strong>
+            <strong class="metric-value">@(Model.TotalTecnicosAtivos?.ToString() ?? "0")</strong>
             <span class="metric-note">Técnicos disponíveis</span>
         </article>
         <article class="metric-card">
             <span class="metric-icon orange"><i class="ti ti-tool"></i></span>
             <span class="metric-label">Reparações em curso</span>
-            <strong class="metric-value">@(Model.ReparacoesEmCurso?.ToString() ?? "—")</strong>
+            <strong class="metric-value">@(Model.ReparacoesEmCurso?.ToString() ?? "0")</strong>
             <span class="metric-note">Trabalho por concluir</span>
         </article>
         <article class="metric-card">
             <span class="metric-icon green"><i class="ti ti-circle-check"></i></span>
             <span class="metric-label">Reparações concluídas</span>
-            <strong class="metric-value">@(Model.ReparacoesConcluidas?.ToString() ?? "—")</strong>
+            <strong class="metric-value">@(Model.ReparacoesConcluidas?.ToString() ?? "0")</strong>
             <span class="metric-note">Prontas para entrega</span>
         </article>
         <article class="metric-card">
             <span class="metric-icon red"><i class="ti ti-hourglass"></i></span>
             <span class="metric-label">A aguardar peças</span>
-            <strong class="metric-value">@(Model.ReparacoesAguardarPecas?.ToString() ?? "—")</strong>
+            <strong class="metric-value">@(Model.ReparacoesAguardarPecas?.ToString() ?? "0")</strong>
             <span class="metric-note">Reparações pendentes</span>
         </article>
     </div>
@@ -65,15 +65,30 @@
         <div class="panel-heading">
             <div>
                 <h2>Reparações por estado</h2>
-                <p>Distribuição baseada nos registos de reparação.</p>
+                <p>Distribuição baseada nos registos da base de dados.</p>
             </div>
             <i class="ti ti-chart-donut-3 panel-heading-icon"></i>
         </div>
-        <div class="empty-state">
-            <span class="empty-icon"><i class="ti ti-chart-donut-3"></i></span>
-            <strong>Gráfico preparado</strong>
-            <span>Sem dados calculados nesta fase.</span>
-        </div>
+        @if (Model.ReparacoesPorEstado.Any())
+        {
+            <ul class="list-unstyled chart-list">
+                @foreach (var item in Model.ReparacoesPorEstado)
+                {
+                    <li class="chart-row">
+                        <span>@item.Rotulo</span>
+                        <strong>@item.Valor</strong>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="empty-state">
+                <span class="empty-icon"><i class="ti ti-chart-donut-3"></i></span>
+                <strong>Sem dados</strong>
+                <span>Não existem reparações registadas.</span>
+            </div>
+        }
     </article>
     <article class="panel-card">
         <div class="panel-heading">
@@ -83,11 +98,26 @@
             </div>
             <i class="ti ti-chart-line panel-heading-icon"></i>
         </div>
-        <div class="empty-state">
-            <span class="empty-icon"><i class="ti ti-chart-line"></i></span>
-            <strong>Gráfico preparado</strong>
-            <span>Sem dados calculados nesta fase.</span>
-        </div>
+        @if (Model.ReparacoesMensais.Any())
+        {
+            <ul class="list-unstyled chart-list">
+                @foreach (var item in Model.ReparacoesMensais)
+                {
+                    <li class="chart-row">
+                        <span>@item.Rotulo</span>
+                        <strong>@item.Valor</strong>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="empty-state">
+                <span class="empty-icon"><i class="ti ti-chart-line"></i></span>
+                <strong>Sem dados</strong>
+                <span>Ainda não existem dados mensais.</span>
+            </div>
+        }
     </article>
     <article class="panel-card">
         <div class="panel-heading">
@@ -97,25 +127,56 @@
             </div>
             <i class="ti ti-chart-bar panel-heading-icon"></i>
         </div>
-        <div class="empty-state">
-            <span class="empty-icon"><i class="ti ti-chart-bar"></i></span>
-            <strong>Gráfico preparado</strong>
-            <span>Sem dados calculados nesta fase.</span>
-        </div>
+        @if (Model.EvolucaoCustos.Any())
+        {
+            <ul class="list-unstyled chart-list">
+                @foreach (var item in Model.EvolucaoCustos)
+                {
+                    <li class="chart-row">
+                        <span>@item.Periodo</span>
+                        <strong>@item.CustoMaoObra.ToString("C2") / @item.CustoPecas.ToString("C2")</strong>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="empty-state">
+                <span class="empty-icon"><i class="ti ti-chart-bar"></i></span>
+                <strong>Sem dados</strong>
+                <span>Não há custos registados.</span>
+            </div>
+        }
     </article>
     <article class="panel-card">
         <div class="panel-heading">
             <div>
                 <h2>Atividade recente</h2>
-                <p>Reparações, intervenções e receções.</p>
+                <p>Últimas reparações registadas.</p>
             </div>
             <i class="ti ti-activity panel-heading-icon"></i>
         </div>
-        <div class="empty-state">
-            <span class="empty-icon"><i class="ti ti-clipboard-list"></i></span>
-            <strong>Atividade preparada</strong>
-            <span>A atividade será carregada da base de dados.</span>
-        </div>
+        @if (Model.AtividadeRecente.Any())
+        {
+            <ul class="list-unstyled activity-list">
+                @foreach (var item in Model.AtividadeRecente)
+                {
+                    <li>
+                        <strong>@item.Tipo</strong>
+                        <span>@item.Descricao</span>
+                        <small>@item.Data.ToString("dd/MM/yyyy")</small>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="empty-state">
+                <span class="empty-icon"><i class="ti ti-clipboard-list"></i></span>
+                <strong>Sem atividades</strong>
+                <span>Ainda não há registos recentes.</span>
+            </div>
+        }
     </article>
     <article class="panel-card alerts-panel">
         <div class="panel-heading">
@@ -125,11 +186,20 @@
             </div>
             <i class="ti ti-bell panel-heading-icon"></i>
         </div>
-        <div class="alert-rules">
-            <div><i class="ti ti-clock-exclamation"></i><span>Reparações sem atualização</span></div>
-            <div><i class="ti ti-package"></i><span>Equipamentos à espera de peças</span></div>
-            <div><i class="ti ti-package-export"></i><span>Reparações concluídas por entregar</span></div>
-        </div>
-        <div class="alert-footnote">Os alertas serão calculados segundo regras de negócio e dados reais.</div>
+        @if (Model.Alertas.Any())
+        {
+            <div class="alert-rules">
+                @foreach (var alerta in Model.Alertas)
+                {
+                    <div><i class="ti ti-bell"></i><span>@alerta.Tipo: @alerta.Descricao</span></div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert-rules">
+                <div><i class="ti ti-bell"></i><span>Sem alertas ativos neste momento.</span></div>
+            </div>
+        }
     </article>
 </section>

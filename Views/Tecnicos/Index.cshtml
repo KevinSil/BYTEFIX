@@ -1,0 +1,67 @@
+@model IEnumerable<Tecnico>
+@{
+    ViewData["Title"] = "Técnicos";
+    ViewData["Section"] = "Técnicos";
+}
+
+<div class="page-heading">
+    <div>
+        <div class="page-eyebrow">GESTÃO</div>
+        <h1>Técnicos</h1>
+        <p>Gestão do corpo técnico e da sua disponibilidade.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Novo técnico</a>
+</div>
+
+<div class="table-card">
+    <div class="table-wrapper">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Especialidade</th>
+                    <th>Estado</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">Ainda não existem técnicos registados.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var tecnico in Model)
+                    {
+                        <tr>
+                            <td>@tecnico.Nome</td>
+                            <td>@tecnico.Email</td>
+                            <td>@tecnico.Telefone</td>
+                            <td>@tecnico.Especialidade</td>
+                            <td>
+                                @if (tecnico.Ativo)
+                                {
+                                    <span class="badge bg-success">Ativo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inativo</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <div class="action-group">
+                                    <a asp-action="Edit" asp-route-id="@tecnico.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@tecnico.Id" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

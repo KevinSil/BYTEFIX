@@ -1,0 +1,32 @@
+@model Intervencao
+@{
+    ViewData["Title"] = "Eliminar intervenção";
+    ViewData["Section"] = "Intervenções";
+}
+
+<div class="page-heading">
+    <div>
+        <div class="page-eyebrow">INTERVENÇÕES</div>
+        <h1>Eliminar intervenção</h1>
+    </div>
+</div>
+
+<div class="form-card">
+    <p>Tem a certeza que pretende eliminar esta intervenção?</p>
+    <dl class="row mb-4">
+        <dt class="col-sm-3">Reparação</dt>
+        <dd class="col-sm-9">@Model.Reparacao?.Equipamento?.Marca @Model.Reparacao?.Equipamento?.Modelo</dd>
+        <dt class="col-sm-3">Descrição</dt>
+        <dd class="col-sm-9">@Model.DescricaoTrabalho</dd>
+        <dt class="col-sm-3">Custo total</dt>
+        <dd class="col-sm-9">@((Model.CustoMaoObra + Model.CustoPecas).ToString("C2"))</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>

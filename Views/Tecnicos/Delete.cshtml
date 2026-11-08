@@ -1,0 +1,32 @@
+@model Tecnico
+@{
+    ViewData["Title"] = "Eliminar técnico";
+    ViewData["Section"] = "Técnicos";
+}
+
+<div class="page-heading">
+    <div>
+        <div class="page-eyebrow">TÉCNICOS</div>
+        <h1>Eliminar técnico</h1>
+    </div>
+</div>
+
+<div class="form-card">
+    <p>Tem a certeza que pretende eliminar o técnico <strong>@Model.Nome</strong>?</p>
+    <dl class="row mb-4">
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+        <dt class="col-sm-3">Especialidade</dt>
+        <dd class="col-sm-9">@Model.Especialidade</dd>
+        <dt class="col-sm-3">Estado</dt>
+        <dd class="col-sm-9">@(Model.Ativo ? "Ativo" : "Inativo")</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>

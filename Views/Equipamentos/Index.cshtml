@@ -1,0 +1,58 @@
+@model IEnumerable<Equipamento>
+@{
+    ViewData["Title"] = "Equipamentos";
+    ViewData["Section"] = "Equipamentos";
+}
+
+<div class="page-heading">
+    <div>
+        <div class="page-eyebrow">GESTÃO</div>
+        <h1>Equipamentos</h1>
+        <p>Lista dos equipamentos registados por cliente.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">Novo equipamento</a>
+</div>
+
+<div class="table-card">
+    <div class="table-wrapper">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Tipo</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Nº Série</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">Ainda não existem equipamentos registados.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var equipamento in Model)
+                    {
+                        <tr>
+                            <td>@equipamento.Cliente.Nome</td>
+                            <td>@equipamento.TipoEquipamento</td>
+                            <td>@equipamento.Marca</td>
+                            <td>@equipamento.Modelo</td>
+                            <td>@equipamento.NumeroSerie</td>
+                            <td class="text-end">
+                                <div class="action-group">
+                                    <a asp-action="Edit" asp-route-id="@equipamento.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@equipamento.Id" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

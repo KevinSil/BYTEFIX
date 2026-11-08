@@ -1,0 +1,63 @@
+@model Intervencao
+@{
+    ViewData["Title"] = "Editar intervenção";
+    ViewData["Section"] = "Intervenções";
+    var reparacoes = ViewBag.Reparacoes as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+}
+
+<div class="page-heading">
+    <div>
+        <div class="page-eyebrow">INTERVENÇÕES</div>
+        <h1>Editar intervenção</h1>
+    </div>
+</div>
+
+<div class="form-card">
+    <form asp-action="Edit" method="post">
+        <input asp-for="Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="ReparacaoId" class="form-label"></label>
+                <select asp-for="ReparacaoId" asp-items="reparacoes" class="form-select"></select>
+                <span asp-validation-for="ReparacaoId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="TempoTrabalho" class="form-label"></label>
+                <input asp-for="TempoTrabalho" class="form-control" step="0.01" />
+                <span asp-validation-for="TempoTrabalho" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CustoMaoObra" class="form-label"></label>
+                <input asp-for="CustoMaoObra" class="form-control" step="0.01" />
+                <span asp-validation-for="CustoMaoObra" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CustoPecas" class="form-label"></label>
+                <input asp-for="CustoPecas" class="form-control" step="0.01" />
+                <span asp-validation-for="CustoPecas" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="DescricaoTrabalho" class="form-label"></label>
+                <textarea asp-for="DescricaoTrabalho" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="DescricaoTrabalho" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="PecasUtilizadas" class="form-label"></label>
+                <textarea asp-for="PecasUtilizadas" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="PecasUtilizadas" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Observacoes" class="form-label"></label>
+                <textarea asp-for="Observacoes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Observacoes" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar alterações</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>

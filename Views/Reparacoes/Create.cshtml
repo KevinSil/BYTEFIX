@@ -1,0 +1,72 @@
+@model Reparacao
+@{
+    ViewData["Title"] = "Nova reparação";
+    ViewData["Section"] = "Reparações";
+    var equipamentos = ViewBag.Equipamentos as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var tecnicos = ViewBag.Tecnicos as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var estados = ViewBag.Estados as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+}
+
+<div class="page-heading">
+    <div>
+        <div class="page-eyebrow">REPARAÇÕES</div>
+        <h1>Nova reparação</h1>
+    </div>
+</div>
+
+<div class="form-card">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="EquipamentoId" class="form-label"></label>
+                <select asp-for="EquipamentoId" asp-items="equipamentos" class="form-select"></select>
+                <span asp-validation-for="EquipamentoId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="TecnicoId" class="form-label"></label>
+                <select asp-for="TecnicoId" asp-items="tecnicos" class="form-select">
+                    <option value="">Sem técnico atribuído</option>
+                </select>
+                <span asp-validation-for="TecnicoId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Estado" class="form-label"></label>
+                <select asp-for="Estado" asp-items="estados" class="form-select"></select>
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="DataConclusao" class="form-label"></label>
+                <input asp-for="DataConclusao" class="form-control" type="date" />
+                <span asp-validation-for="DataConclusao" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="DataEntrega" class="form-label"></label>
+                <input asp-for="DataEntrega" class="form-control" type="date" />
+                <span asp-validation-for="DataEntrega" class="text-danger"></span>
+            </div>
+            <div class="col-md-6"></div>
+            <div class="col-12">
+                <label asp-for="DescricaoAvaria" class="form-label"></label>
+                <textarea asp-for="DescricaoAvaria" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="DescricaoAvaria" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Diagnostico" class="form-label"></label>
+                <textarea asp-for="Diagnostico" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Diagnostico" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Observacoes" class="form-label"></label>
+                <textarea asp-for="Observacoes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Observacoes" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar reparação</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>

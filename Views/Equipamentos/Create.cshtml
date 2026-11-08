@@ -1,0 +1,58 @@
+@model Equipamento
+@{
+    ViewData["Title"] = "Novo equipamento";
+    ViewData["Section"] = "Equipamentos";
+    var clientes = ViewBag.Clientes as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+}
+
+<div class="page-heading">
+    <div>
+        <div class="page-eyebrow">EQUIPAMENTOS</div>
+        <h1>Novo equipamento</h1>
+    </div>
+</div>
+
+<div class="form-card">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="ClienteId" class="form-label"></label>
+                <select asp-for="ClienteId" asp-items="clientes" class="form-select"></select>
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="TipoEquipamento" class="form-label"></label>
+                <input asp-for="TipoEquipamento" class="form-control" />
+                <span asp-validation-for="TipoEquipamento" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Marca" class="form-label"></label>
+                <input asp-for="Marca" class="form-control" />
+                <span asp-validation-for="Marca" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Modelo" class="form-label"></label>
+                <input asp-for="Modelo" class="form-control" />
+                <span asp-validation-for="Modelo" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="NumeroSerie" class="form-label"></label>
+                <input asp-for="NumeroSerie" class="form-control" />
+                <span asp-validation-for="NumeroSerie" class="text-danger"></span>
+            </div>
+            <div class="col-md-6"></div>
+            <div class="col-12">
+                <label asp-for="Descricao" class="form-label"></label>
+                <textarea asp-for="Descricao" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar equipamento</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
