@@ -15,4 +15,11 @@
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.14" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="ByteFix.Tests\**\*.cs" />
+    <Content Remove="ByteFix.Tests\**\*" />
+    <EmbeddedResource Remove="ByteFix.Tests\**\*" />
+    <None Remove="ByteFix.Tests\**\*" />
+  </ItemGroup>
+
 </Project>
