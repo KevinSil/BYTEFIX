@@ -1,0 +1,135 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Section"] = "Visão geral";
+}
+
+<div class="page-heading">
+    <div>
+        <div class="page-eyebrow">SMART REPAIR MANAGEMENT</div>
+        <h1>Dashboard</h1>
+        <p>Acompanhe a operação da sua oficina num só lugar.</p>
+    </div>
+    <span class="outline-badge"><i class="ti ti-database"></i> Dados reais, sem demonstração</span>
+</div>
+
+<section aria-labelledby="indicators-title">
+    <div class="section-heading">
+        <div>
+            <h2 id="indicators-title">Indicadores principais</h2>
+            <p>Valores apresentados quando o cálculo com dados reais for implementado.</p>
+        </div>
+    </div>
+    <div class="metric-grid">
+        <article class="metric-card">
+            <span class="metric-icon blue"><i class="ti ti-users"></i></span>
+            <span class="metric-label">Total de clientes</span>
+            <strong class="metric-value">@(Model.TotalClientes?.ToString() ?? "—")</strong>
+            <span class="metric-note">Registos na base de dados</span>
+        </article>
+        <article class="metric-card">
+            <span class="metric-icon cyan"><i class="ti ti-device-laptop"></i></span>
+            <span class="metric-label">Equipamentos</span>
+            <strong class="metric-value">@(Model.TotalEquipamentos?.ToString() ?? "—")</strong>
+            <span class="metric-note">Equipamentos registados</span>
+        </article>
+        <article class="metric-card">
+            <span class="metric-icon green"><i class="ti ti-user-cog"></i></span>
+            <span class="metric-label">Técnicos ativos</span>
+            <strong class="metric-value">@(Model.TotalTecnicosAtivos?.ToString() ?? "—")</strong>
+            <span class="metric-note">Técnicos disponíveis</span>
+        </article>
+        <article class="metric-card">
+            <span class="metric-icon orange"><i class="ti ti-tool"></i></span>
+            <span class="metric-label">Reparações em curso</span>
+            <strong class="metric-value">@(Model.ReparacoesEmCurso?.ToString() ?? "—")</strong>
+            <span class="metric-note">Trabalho por concluir</span>
+        </article>
+        <article class="metric-card">
+            <span class="metric-icon green"><i class="ti ti-circle-check"></i></span>
+            <span class="metric-label">Reparações concluídas</span>
+            <strong class="metric-value">@(Model.ReparacoesConcluidas?.ToString() ?? "—")</strong>
+            <span class="metric-note">Prontas para entrega</span>
+        </article>
+        <article class="metric-card">
+            <span class="metric-icon red"><i class="ti ti-hourglass"></i></span>
+            <span class="metric-label">A aguardar peças</span>
+            <strong class="metric-value">@(Model.ReparacoesAguardarPecas?.ToString() ?? "—")</strong>
+            <span class="metric-note">Reparações pendentes</span>
+        </article>
+    </div>
+</section>
+
+<section class="dashboard-grid" aria-label="Análise e atividade">
+    <article class="panel-card">
+        <div class="panel-heading">
+            <div>
+                <h2>Reparações por estado</h2>
+                <p>Distribuição baseada nos registos de reparação.</p>
+            </div>
+            <i class="ti ti-chart-donut-3 panel-heading-icon"></i>
+        </div>
+        <div class="empty-state">
+            <span class="empty-icon"><i class="ti ti-chart-donut-3"></i></span>
+            <strong>Gráfico preparado</strong>
+            <span>Sem dados calculados nesta fase.</span>
+        </div>
+    </article>
+    <article class="panel-card">
+        <div class="panel-heading">
+            <div>
+                <h2>Reparações mensais</h2>
+                <p>Entradas registadas ao longo do tempo.</p>
+            </div>
+            <i class="ti ti-chart-line panel-heading-icon"></i>
+        </div>
+        <div class="empty-state">
+            <span class="empty-icon"><i class="ti ti-chart-line"></i></span>
+            <strong>Gráfico preparado</strong>
+            <span>Sem dados calculados nesta fase.</span>
+        </div>
+    </article>
+    <article class="panel-card">
+        <div class="panel-heading">
+            <div>
+                <h2>Evolução dos custos</h2>
+                <p>Mão de obra e peças por período.</p>
+            </div>
+            <i class="ti ti-chart-bar panel-heading-icon"></i>
+        </div>
+        <div class="empty-state">
+            <span class="empty-icon"><i class="ti ti-chart-bar"></i></span>
+            <strong>Gráfico preparado</strong>
+            <span>Sem dados calculados nesta fase.</span>
+        </div>
+    </article>
+    <article class="panel-card">
+        <div class="panel-heading">
+            <div>
+                <h2>Atividade recente</h2>
+                <p>Reparações, intervenções e receções.</p>
+            </div>
+            <i class="ti ti-activity panel-heading-icon"></i>
+        </div>
+        <div class="empty-state">
+            <span class="empty-icon"><i class="ti ti-clipboard-list"></i></span>
+            <strong>Atividade preparada</strong>
+            <span>A atividade será carregada da base de dados.</span>
+        </div>
+    </article>
+    <article class="panel-card alerts-panel">
+        <div class="panel-heading">
+            <div>
+                <h2>Alertas</h2>
+                <p>Situações que necessitam de atenção.</p>
+            </div>
+            <i class="ti ti-bell panel-heading-icon"></i>
+        </div>
+        <div class="alert-rules">
+            <div><i class="ti ti-clock-exclamation"></i><span>Reparações sem atualização</span></div>
+            <div><i class="ti ti-package"></i><span>Equipamentos à espera de peças</span></div>
+            <div><i class="ti ti-package-export"></i><span>Reparações concluídas por entregar</span></div>
+        </div>
+        <div class="alert-footnote">Os alertas serão calculados segundo regras de negócio e dados reais.</div>
+    </article>
+</section>

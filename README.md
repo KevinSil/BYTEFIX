@@ -15,29 +15,26 @@ O sistema permite centralizar a informação dos clientes, equipamentos, técnic
 
 O projeto foi desenvolvido com o objetivo de melhorar a organização do trabalho diário de uma oficina informática, reduzir tarefas manuais e facilitar o controlo de todas as etapas de uma reparação.
 
-## ✨ Funcionalidades
+## ✨ Funcionalidades previstas
 
-- 👥 **Gestão de clientes** — Registo e consulta dos dados dos clientes.
-- 💻 **Gestão de equipamentos** — Associação de equipamentos aos respetivos clientes.
-- 🧑‍🔧 **Gestão de técnicos** — Registo de técnicos, especialidades e estado de atividade.
-- 🛠️ **Gestão de reparações** — Acompanhamento das reparações e dos respetivos estados.
-- 📋 **Gestão de intervenções** — Registo dos trabalhos realizados em cada reparação.
-- 💰 **Controlo de custos** — Registo dos custos de mão de obra e peças utilizadas.
-- 📊 **Dashboard Inteligente** — Visão geral da atividade através de indicadores e informação relevante.
-- 🔎 **Pesquisa e consulta** — Facilita a localização e consulta dos registos.
+- 👥 **Clientes e equipamentos** — Registo de clientes e dos respetivos equipamentos.
+- 🧑‍🔧 **Técnicos** — Especialidades, estado de atividade e atribuição a reparações.
+- 🛠️ **Reparações e intervenções** — Acompanhamento das reparações e trabalhos realizados.
+- 💰 **Custos** — Registo dos custos de mão de obra e peças.
+- 📊 **Dashboard Inteligente** — Indicadores, gráficos, atividade recente e alertas baseados em dados reais.
 
-## 📊 Dashboard Inteligente
+Nesta Fase 1 estão implementados os modelos, a persistência, a identidade visual e a estrutura do dashboard. As operações de gestão e os cálculos serão desenvolvidos na Fase 2.
 
-O ByteFix inclui um Dashboard Inteligente concebido para apresentar, de forma clara, o estado geral da atividade da empresa.
+## 📊 Dashboard Inteligente previsto
 
-Entre os indicadores previstos encontram-se:
+O dashboard foi estruturado para apresentar, quando os cálculos forem implementados:
 
-- Número de reparações em curso;
-- Reparações concluídas;
-- Equipamentos à espera de peças;
-- Atividade recente.
+- Indicadores de clientes, equipamentos, técnicos e reparações;
+- Distribuição e evolução mensal das reparações;
+- Evolução dos custos de mão de obra e peças;
+- Atividade recente e alertas.
 
-O objetivo é permitir uma consulta rápida da situação da oficina e apoiar a organização do trabalho.
+Nenhum valor demonstrativo é apresentado nesta fase.
 
 ## 🔄 Estados das reparações
 
@@ -67,7 +64,7 @@ Cada reparação pode assumir um dos seguintes estados:
 
 A aplicação segue o padrão arquitetural **MVC (Model-View-Controller)**, separando os dados, a interface e a lógica de controlo.
 
-Estrutura principal prevista:
+Estrutura da Fase 1:
 
 ```text
 ByteFix/
@@ -80,7 +77,7 @@ ByteFix/
 ├── Views/             # Páginas e interfaces
 ├── wwwroot/           # CSS, JavaScript e imagens
 ├── Migrations/        # Migrações do Entity Framework Core
-├── Documentation/     # Documentação técnica do projeto
+├── Documentation/     # Requisitos, diagrama ER, modelo e dicionário de dados
 │
 ├── appsettings.json   # Configurações da aplicação
 └── Program.cs         # Ponto de entrada da aplicação
@@ -113,70 +110,42 @@ O modelo de dados é constituído por cinco entidades principais:
 
 Antes de iniciar, certifica-te de que tens instalado:
 
-- [.NET SDK](https://dotnet.microsoft.com/download)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Git](https://git-scm.com/)
 
-### 2. Clonar o repositório
-
-```bash
-git clone https://github.com/TEU-UTILIZADOR/ByteFix.git
-```
-
-Entra na pasta do projeto:
-
-```bash
-cd ByteFix
-```
-
-### 3. Restaurar dependências
+### 2. Restaurar dependências e criar a base de dados
 
 ```bash
 dotnet restore
-```
-
-### 4. Instalar a ferramenta de migrações
-
-Caso ainda não tenhas o Entity Framework Core CLI instalado:
-
-```bash
-dotnet tool install --global dotnet-ef
-```
-
-Se já estiver instalado, podes atualizá-lo:
-
-```bash
-dotnet tool update --global dotnet-ef
-```
-
-### 5. Criar ou atualizar a base de dados
-
-```bash
+dotnet tool install --global dotnet-ef --version 10.0.14
 dotnet ef database update
 ```
 
-Este comando aplica as migrações existentes e atualiza a base de dados SQLite.
+O projeto usa o provider SQLite e cria o ficheiro `ByteFix.db` na pasta da aplicação. Para criar uma migração após alterar o modelo:
 
-### 6. Executar a aplicação
+```bash
+dotnet ef migrations add NomeDaMigracao
+```
+
+As migrações iniciais estão versionadas em `Migrations/`.
+
+### 3. Executar a aplicação
 
 ```bash
 dotnet run
 ```
 
-Depois, abre no navegador o endereço apresentado no terminal.
-
-> Nota: Os comandos devem ser executados na pasta que contém o ficheiro `.csproj`. Se o projeto ainda não tiver migrações criadas, será necessário criá-las antes de executar a atualização da base de dados.
 
 ## 📚 Documentação
 
-A documentação do projeto encontra-se na pasta `Documentation/` e pode incluir:
+Os documentos de análise e conceção encontram-se em `Documentation/`:
 
-- Requisitos funcionais e técnicos;
-- Diagrama Entidade-Relação (ER);
-- Modelo relacional;
-- Dicionário de dados;
-- Documentação técnica;
-- Manual de utilização.
+- `01-Requisitos.md`
+- `02-Diagrama-ER.md`
+- `03-Modelo-Relacional.md`
+- `04-Dicionario-Dados.md`
+- `05-Dashboard.md`
 
 ## 🎯 Objetivos do projeto
 
@@ -200,4 +169,3 @@ Este projeto foi desenvolvido no âmbito da disciplina de **Desenvolvimento de A
   <em>Smart Repair Management</em><br><br>
   🔧 Organizar. Reparar. Simplificar.
 </p>
-
