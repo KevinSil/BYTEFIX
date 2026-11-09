@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ByteFix.Models;
 
@@ -20,14 +21,15 @@ public sealed class Intervencao
     [Range(typeof(decimal), "0", "1000000")]
     public decimal TempoTrabalho { get; set; }
 
-    [Range(typeof(decimal), "0", "99999999.99")]
+    [Range(0d, 99999999.99d)]
     public decimal CustoMaoObra { get; set; }
 
-    [Range(typeof(decimal), "0", "99999999.99")]
+    [Range(0d, 99999999.99d)]
     public decimal CustoPecas { get; set; }
 
     [StringLength(2000)]
     public string? Observacoes { get; set; }
 
+    [ValidateNever]
     public Reparacao Reparacao { get; set; } = null!;
 }

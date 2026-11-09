@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ByteFix.Models;
 
@@ -29,9 +30,12 @@ public sealed class Reparacao
     [StringLength(2000)]
     public string? Observacoes { get; set; }
 
+    [ValidateNever]
     public Equipamento Equipamento { get; set; } = null!;
 
+    [ValidateNever]
     public Tecnico? Tecnico { get; set; }
 
+    [ValidateNever]
     public ICollection<Intervencao> Intervencoes { get; set; } = new List<Intervencao>();
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ByteFix.Models;
 
@@ -26,6 +27,7 @@ public sealed class Equipamento
 
     public DateTime DataRegisto { get; set; } = DateTime.UtcNow;
 
+    [ValidateNever]
     public Cliente Cliente { get; set; } = null!;
 
     public ICollection<Reparacao> Reparacoes { get; set; } = new List<Reparacao>();

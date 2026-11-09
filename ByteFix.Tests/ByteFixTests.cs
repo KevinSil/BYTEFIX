@@ -54,6 +54,99 @@ public sealed class ByteFixTests : IDisposable
     }
 
     [Fact]
+    public async Task EquipmentCreateSavesEquipmentForExistingCustomer()
+    {
+        var cliente = new Cliente { Nome = "Ana Costa", NIF = "123456789" };
+        _context.Clientes.Add(cliente);
+        await _context.SaveChangesAsync();
+
+        var controller = new EquipamentosController(_context);
+        var equipamento = new Equipamento
+        {
+            ClienteId = cliente.Id,
+            TipoEquipamento = "Laptop",
+            Marca = "Dell",
+            Modelo = "Latitude 5530",
+            NumeroSerie = "ABC123"
+        };
+
+        var result = await controller.Create(equipamento);
+
+        Assert.IsType<RedirectToActionResult>(result);
+        var stored = await _context.Equipamentos.SingleAsync();
+        Assert.Equal(cliente.Id, stored.ClienteId);
+        Assert.Equal("Dell", stored.Marca);
+    }
+
+    [Fact]
+    public async Task RepairCreateSavesRepairForExistingEquipment()
+    {
+        var cliente = new Cliente { Nome = "Ana Costa", NIF = "123456789" };
+        var equipamento = new Equipamento
+        {
+            Cliente = cliente,
+            TipoEquipamento = "Laptop",
+            Marca = "Dell",
+            Modelo = "Latitude 5530"
+        };
+        _context.Equipamentos.Add(equipamento);
+        await _context.SaveChangesAsync();
+
+        var controller = new ReparacoesController(_context);
+        var reparacao = new Reparacao
+        {
+            EquipamentoId = equipamento.Id,
+            DescricaoAvaria = "Não liga",
+            Estado = ReparacaoEstado.AguardarDiagnostico
+        };
+
+        var result = await controller.Create(reparacao);
+
+        Assert.IsType<RedirectToActionResult>(result);
+        var stored = await _context.Reparacoes.SingleAsync();
+        Assert.Equal(equipamento.Id, stored.EquipamentoId);
+        Assert.Equal("Não liga", stored.DescricaoAvaria);
+    }
+
+    [Fact]
+    public async Task InterventionCreateSavesInterventionForExistingRepair()
+    {
+        var cliente = new Cliente { Nome = "Ana Costa", NIF = "123456789" };
+        var equipamento = new Equipamento
+        {
+            Cliente = cliente,
+            TipoEquipamento = "Laptop",
+            Marca = "Dell",
+            Modelo = "Latitude 5530"
+        };
+        var reparacao = new Reparacao
+        {
+            Equipamento = equipamento,
+            DescricaoAvaria = "Não liga",
+            Estado = ReparacaoEstado.AguardarDiagnostico
+        };
+        _context.Reparacoes.Add(reparacao);
+        await _context.SaveChangesAsync();
+
+        var controller = new IntervencoesController(_context);
+        var intervencao = new Intervencao
+        {
+            ReparacaoId = reparacao.Id,
+            DescricaoTrabalho = "Substituição da fonte",
+            TempoTrabalho = 1.5m,
+            CustoMaoObra = 45m,
+            CustoPecas = 20m
+        };
+
+        var result = await controller.Create(intervencao);
+
+        Assert.IsType<RedirectToActionResult>(result);
+        var stored = await _context.Intervencoes.SingleAsync();
+        Assert.Equal(reparacao.Id, stored.ReparacaoId);
+        Assert.Equal("Substituição da fonte", stored.DescricaoTrabalho);
+    }
+
+    [Fact]
     public async Task CanRegisterTechnicianRepairAndIntervention()
     {
         var cliente = new Cliente { Nome = "Pedro Silva", NIF = "987654321", Email = "pedro@bytefix.pt" };
