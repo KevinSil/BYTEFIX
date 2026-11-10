@@ -9,8 +9,10 @@ using Xunit;
 
 namespace ByteFix.Tests;
 
+// Classe: verifica as operações principais e as relações entre os dados.
 public sealed class ByteFixTests : IDisposable
 {
+    // Atributo: ligação SQLite temporária usada nos testes.
     private readonly SqliteConnection _connection;
     private readonly ApplicationDbContext _context;
 

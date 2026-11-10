@@ -1,6 +1,7 @@
 using ByteFix.Data;
 using Microsoft.EntityFrameworkCore;
 
+// Configuração: prepara os serviços, a base de dados e o encaminhamento da aplicação.
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();

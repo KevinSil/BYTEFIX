@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ByteFix.Models;
 
+// Classe: reúne os dados, estado e relações de uma reparação.
 public sealed class Reparacao
 {
+    // Atributo: identificador único da reparação.
     public int Id { get; set; }
 
     [Required]

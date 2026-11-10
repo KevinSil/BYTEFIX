@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ByteFix.Controllers;
 
+// Classe: gere os dados dos técnicos e as operações disponíveis sobre eles.
 public sealed class TecnicosController : Controller
 {
+    // Atributo: acesso aos dados da aplicação.
     private readonly ApplicationDbContext _context;
 
     public TecnicosController(ApplicationDbContext context)

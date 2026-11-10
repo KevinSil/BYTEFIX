@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ByteFix.Models;
 
+// Classe: regista um equipamento e liga-o ao respetivo cliente e reparações.
 public sealed class Equipamento
 {
+    // Atributo: identificador único do equipamento.
     public int Id { get; set; }
 
     [Required]

@@ -4,13 +4,13 @@
     ViewData["Section"] = "Reparações";
 }
 
-<div class="page-heading">
+<div class="page-header page-heading">
     <div>
         <div class="page-eyebrow">GESTÃO</div>
         <h1>Reparações</h1>
         <p>Acompanhamento do estado das intervenções em curso.</p>
     </div>
-    <a asp-action="Create" class="btn btn-primary">Nova reparação</a>
+    <a asp-action="Create" class="btn btn-primary"><i class="ti ti-plus me-1"></i>Nova reparação</a>
 </div>
 
 @if (TempData["Error"] is string error)
@@ -18,9 +18,9 @@
     <div class="alert alert-danger">@error</div>
 }
 
-<div class="table-card">
-    <div class="table-wrapper">
-        <table class="table table-striped table-hover align-middle mb-0">
+<div class="card table-card">
+    <div class="table-responsive table-wrapper">
+        <table class="table table-vcenter table-hover card-table">
             <thead>
                 <tr>
                     <th>Equipamento</th>
@@ -50,8 +50,8 @@
                             <td>@reparacao.DataEntrada.ToString("dd/MM/yyyy")</td>
                             <td class="text-end">
                                 <div class="action-group">
-                                    <a asp-action="Edit" asp-route-id="@reparacao.Id" class="btn btn-sm btn-outline-primary">Editar</a>
-                                    <a asp-action="Delete" asp-route-id="@reparacao.Id" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                                    <a asp-action="Edit" asp-route-id="@reparacao.Id" class="btn btn-sm btn-outline-primary"><i class="ti ti-edit me-1"></i>Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@reparacao.Id" class="btn btn-sm btn-outline-danger"><i class="ti ti-trash me-1"></i>Eliminar</a>
                                 </div>
                             </td>
                         </tr>

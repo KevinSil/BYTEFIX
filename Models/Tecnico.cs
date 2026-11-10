@@ -2,8 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ByteFix.Models;
 
+// Classe: guarda os dados do técnico e as reparações que lhe são atribuídas.
 public sealed class Tecnico
 {
+    // Atributo: identificador único do técnico.
     public int Id { get; set; }
 
     [Required, StringLength(150)]

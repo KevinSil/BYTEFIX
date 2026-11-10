@@ -6,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ByteFix.Controllers;
 
+// Classe: gere os equipamentos e a sua ligação aos clientes.
 public sealed class EquipamentosController : Controller
 {
+    // Atributo: acesso aos dados da aplicação.
     private readonly ApplicationDbContext _context;
 
     public EquipamentosController(ApplicationDbContext context)

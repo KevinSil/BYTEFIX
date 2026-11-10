@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ByteFix.Data;
 
+// Classe: liga os modelos da aplicação às tabelas e regras da base de dados.
 public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : DbContext(options)
 {
+    // Atributo: conjunto de clientes guardados na base de dados.
     public DbSet<Cliente> Clientes => Set<Cliente>();
     public DbSet<Equipamento> Equipamentos => Set<Equipamento>();
     public DbSet<Tecnico> Tecnicos => Set<Tecnico>();

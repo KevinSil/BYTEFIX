@@ -1,7 +1,9 @@
 namespace ByteFix.Models;
 
+// Classe: centraliza os nomes dos estados permitidos para as reparações.
 public static class ReparacaoEstado
 {
+    // Atributo: estado inicial de uma reparação.
     public const string AguardarDiagnostico = "A aguardar diagnóstico";
     public const string EmReparacao = "Em reparação";
     public const string AguardarPecas = "A aguardar peças";

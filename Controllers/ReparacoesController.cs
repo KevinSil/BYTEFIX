@@ -6,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ByteFix.Controllers;
 
+// Classe: gere as reparações, os seus estados e as respetivas associações.
 public sealed class ReparacoesController : Controller
 {
+    // Atributo: acesso aos dados da aplicação.
     private readonly ApplicationDbContext _context;
 
     public ReparacoesController(ApplicationDbContext context)

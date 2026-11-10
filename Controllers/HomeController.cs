@@ -6,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ByteFix.Controllers;
 
+// Classe: prepara os indicadores e conteúdos apresentados no painel inicial.
 public sealed class HomeController : Controller
 {
+    // Atributo: acesso aos dados da aplicação.
     private readonly ApplicationDbContext _context;
 
     public HomeController(ApplicationDbContext context)

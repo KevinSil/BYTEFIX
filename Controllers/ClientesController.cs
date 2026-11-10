@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ByteFix.Controllers;
 
+// Classe: gere a consulta e as operações de criação, edição e remoção de clientes.
 public sealed class ClientesController : Controller
 {
+    // Atributo: acesso aos dados da aplicação.
     private readonly ApplicationDbContext _context;
 
     public ClientesController(ApplicationDbContext context)

@@ -2,8 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ByteFix.Models;
 
+// Classe: guarda os dados de contacto e os equipamentos associados a um cliente.
 public sealed class Cliente
 {
+    // Atributo: identificador único do cliente.
     public int Id { get; set; }
 
     [Required, StringLength(150)]

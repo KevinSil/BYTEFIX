@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ByteFix.Models;
 
+// Classe: regista o trabalho, tempo e custos de uma intervenção técnica.
 public sealed class Intervencao
 {
+    // Atributo: identificador único da intervenção.
     public int Id { get; set; }
 
     [Required]

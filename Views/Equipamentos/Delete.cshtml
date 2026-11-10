@@ -4,14 +4,14 @@
     ViewData["Section"] = "Equipamentos";
 }
 
-<div class="page-heading">
+<div class="page-header page-heading">
     <div>
         <div class="page-eyebrow">EQUIPAMENTOS</div>
         <h1>Eliminar equipamento</h1>
     </div>
 </div>
 
-<div class="form-card">
+<div class="card form-card p-3 p-md-4">
     <p>Tem a certeza que pretende eliminar o equipamento <strong>@Model.Marca @Model.Modelo</strong>?</p>
     <dl class="row mb-4">
         <dt class="col-sm-3">Cliente</dt>
@@ -25,7 +25,7 @@
     <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="Id" />
         <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <button type="submit" class="btn btn-danger"><i class="ti ti-trash me-1"></i>Eliminar</button>
             <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
         </div>
     </form>
