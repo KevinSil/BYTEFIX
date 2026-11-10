@@ -2,6 +2,10 @@
 @{
     ViewData["Title"] = "Dashboard";
     ViewData["Section"] = "Visão geral";
+    var reparacoesFinalizadas = Model.ReparacoesFinalizadas ?? 0;
+    var reparacoesPorConcluir = Model.ReparacoesPorConcluir ?? 0;
+    var totalReparacoes = reparacoesFinalizadas + reparacoesPorConcluir;
+    var percentagemFinalizada = totalReparacoes == 0 ? 0 : (int)Math.Round(reparacoesFinalizadas * 100d / totalReparacoes);
 }
 
 <div class="page-header page-heading">
@@ -58,6 +62,57 @@
             <span class="metric-note">Reparações pendentes</span>
         </article>
     </div>
+</section>
+
+<section class="panel-card repair-progress-panel" aria-labelledby="repair-progress-title">
+    <div class="panel-heading">
+        <div>
+            <h2 id="repair-progress-title">Progresso das reparações</h2>
+            <p>Reparações já finalizadas em comparação com as que ainda estão em curso.</p>
+        </div>
+        <i class="ti ti-chart-donut-3 panel-heading-icon"></i>
+    </div>
+    @if (totalReparacoes > 0)
+    {
+        <div class="repair-progress-content">
+            <div class="repair-progress-chart">
+                <canvas id="repair-progress-chart"
+                        data-finished="@reparacoesFinalizadas"
+                        data-pending="@reparacoesPorConcluir"
+                        aria-label="@reparacoesFinalizadas reparações finalizadas e @reparacoesPorConcluir por concluir"
+                        role="img"></canvas>
+                <strong class="repair-progress-center">@percentagemFinalizada%</strong>
+            </div>
+            <div class="repair-progress-details">
+                <div class="repair-progress-stat">
+                    <span class="progress-key"><i class="progress-swatch finished"></i>Feitas</span>
+                    <strong>@reparacoesFinalizadas</strong>
+                    <small>Concluídas ou entregues</small>
+                </div>
+                <div class="repair-progress-stat">
+                    <span class="progress-key"><i class="progress-swatch pending"></i>Por fazer</span>
+                    <strong>@reparacoesPorConcluir</strong>
+                    <small>A aguardar ou em reparação</small>
+                </div>
+                <div class="repair-progress-total">
+                    <span>Total de reparações</span>
+                    <strong>@totalReparacoes</strong>
+                </div>
+                <div class="progress progress-sm" role="progressbar" aria-label="Percentagem de reparações finalizadas"
+                     aria-valuenow="@percentagemFinalizada" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-finished" style="width: @percentagemFinalizada%"></div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <span class="empty-icon"><i class="ti ti-tool"></i></span>
+            <strong>Sem reparações registadas</strong>
+            <span>Quando forem criadas reparações, o progresso aparece aqui.</span>
+        </div>
+    }
 </section>
 
 <section class="dashboard-grid" aria-label="Análise e atividade">
@@ -203,3 +258,38 @@
         }
     </article>
 </section>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+        const progressCanvas = document.getElementById("repair-progress-chart");
+        if (progressCanvas) {
+            new Chart(progressCanvas, {
+                type: "doughnut",
+                data: {
+                    labels: ["Feitas", "Por fazer"],
+                    datasets: [{
+                        data: [Number(progressCanvas.dataset.finished), Number(progressCanvas.dataset.pending)],
+                        backgroundColor: ["#4c9870", "#df735d"],
+                        borderColor: ["#f6faf5", "#f6faf5"],
+                        borderWidth: 4,
+                        hoverOffset: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "76%",
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: context => ` ${context.label}: ${context.raw}`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+}

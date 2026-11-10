@@ -30,10 +30,7 @@ public sealed class EquipamentosController : Controller
 
     public async Task<IActionResult> Create()
     {
-        ViewBag.Clientes = await _context.Clientes
-            .OrderBy(c => c.Nome)
-            .Select(c => new SelectListItem(c.Nome, c.Id.ToString()))
-            .ToListAsync();
+        await PrepareClientList();
 
         return View(new Equipamento());
     }
@@ -42,22 +39,25 @@ public sealed class EquipamentosController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Equipamento equipamento)
     {
+        equipamento.NumeroSerie = NormalizeSerialNumber(equipamento.NumeroSerie);
+
         if (!ModelState.IsValid)
         {
-            ViewBag.Clientes = await _context.Clientes
-                .OrderBy(c => c.Nome)
-                .Select(c => new SelectListItem(c.Nome, c.Id.ToString()))
-                .ToListAsync();
+            await PrepareClientList();
             return View(equipamento);
         }
 
         if (!await _context.Clientes.AnyAsync(c => c.Id == equipamento.ClienteId))
         {
             ModelState.AddModelError(nameof(equipamento.ClienteId), "Cliente inválido.");
-            ViewBag.Clientes = await _context.Clientes
-                .OrderBy(c => c.Nome)
-                .Select(c => new SelectListItem(c.Nome, c.Id.ToString()))
-                .ToListAsync();
+            await PrepareClientList();
+            return View(equipamento);
+        }
+
+        if (equipamento.NumeroSerie is not null && await _context.Equipamentos.AnyAsync(e => e.NumeroSerie == equipamento.NumeroSerie))
+        {
+            ModelState.AddModelError(nameof(equipamento.NumeroSerie), "Já existe um equipamento com este número de série.");
+            await PrepareClientList();
             return View(equipamento);
         }
 
@@ -75,10 +75,7 @@ public sealed class EquipamentosController : Controller
             return NotFound();
         }
 
-        ViewBag.Clientes = await _context.Clientes
-            .OrderBy(c => c.Nome)
-            .Select(c => new SelectListItem(c.Nome, c.Id.ToString()))
-            .ToListAsync();
+        await PrepareClientList();
 
         return View(equipamento);
     }
@@ -92,12 +89,11 @@ public sealed class EquipamentosController : Controller
             return BadRequest();
         }
 
+        equipamento.NumeroSerie = NormalizeSerialNumber(equipamento.NumeroSerie);
+
         if (!ModelState.IsValid)
         {
-            ViewBag.Clientes = await _context.Clientes
-                .OrderBy(c => c.Nome)
-                .Select(c => new SelectListItem(c.Nome, c.Id.ToString()))
-                .ToListAsync();
+            await PrepareClientList();
             return View(equipamento);
         }
 
@@ -105,6 +101,20 @@ public sealed class EquipamentosController : Controller
         if (entity == null)
         {
             return NotFound();
+        }
+
+        if (!await _context.Clientes.AnyAsync(c => c.Id == equipamento.ClienteId))
+        {
+            ModelState.AddModelError(nameof(equipamento.ClienteId), "Cliente inválido.");
+            await PrepareClientList();
+            return View(equipamento);
+        }
+
+        if (equipamento.NumeroSerie is not null && await _context.Equipamentos.AnyAsync(e => e.Id != id && e.NumeroSerie == equipamento.NumeroSerie))
+        {
+            ModelState.AddModelError(nameof(equipamento.NumeroSerie), "Já existe um equipamento com este número de série.");
+            await PrepareClientList();
+            return View(equipamento);
         }
 
         entity.ClienteId = equipamento.ClienteId;
@@ -116,6 +126,20 @@ public sealed class EquipamentosController : Controller
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
+    }
+
+    private async Task PrepareClientList()
+    {
+        ViewBag.Clientes = await _context.Clientes
+            .OrderBy(c => c.Nome)
+            .Select(c => new SelectListItem(c.Nome, c.Id.ToString()))
+            .ToListAsync();
+    }
+
+    private static string? NormalizeSerialNumber(string? serialNumber)
+    {
+        var normalized = serialNumber?.Trim();
+        return string.IsNullOrEmpty(normalized) ? null : normalized;
     }
 
     public async Task<IActionResult> Delete(int id)

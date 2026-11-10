@@ -7,6 +7,8 @@ public sealed class DashboardViewModel
     public long? TotalClientes { get; init; }
     public long? TotalEquipamentos { get; init; }
     public long? TotalTecnicosAtivos { get; init; }
+    public long? ReparacoesFinalizadas { get; init; }
+    public long? ReparacoesPorConcluir { get; init; }
     public long? ReparacoesEmCurso { get; init; }
     public long? ReparacoesConcluidas { get; init; }
     public long? ReparacoesAguardarPecas { get; init; }

@@ -34,6 +34,10 @@ public sealed class HomeController : Controller
             .Select(g => new { Rotulo = g.Key, Valor = g.Count() })
             .OrderBy(x => x.Rotulo)
             .ToListAsync();
+        var reparacoesFinalizadas = reparacoesPorEstado
+            .Where(x => x.Rotulo == ReparacaoEstado.Concluida || x.Rotulo == ReparacaoEstado.EntregueAoCliente)
+            .Sum(x => x.Valor);
+        var reparacoesPorConcluir = reparacoesPorEstado.Sum(x => x.Valor) - reparacoesFinalizadas;
 
         var reparacoesMensais = await _context.Reparacoes
             .GroupBy(r => new { r.DataEntrada.Year, r.DataEntrada.Month })
@@ -91,6 +95,8 @@ public sealed class HomeController : Controller
             TotalClientes = totalClientes,
             TotalEquipamentos = totalEquipamentos,
             TotalTecnicosAtivos = totalTecnicosAtivos,
+            ReparacoesFinalizadas = reparacoesFinalizadas,
+            ReparacoesPorConcluir = reparacoesPorConcluir,
             ReparacoesEmCurso = reparacoesEmCurso,
             ReparacoesConcluidas = reparacoesConcluidas,
             ReparacoesAguardarPecas = reparacoesAguardarPecas,

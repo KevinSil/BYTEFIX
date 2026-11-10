@@ -81,6 +81,40 @@ public sealed class ByteFixTests : IDisposable
     }
 
     [Fact]
+    public async Task EquipmentCreateShowsValidationWhenSerialNumberAlreadyExists()
+    {
+        var cliente = new Cliente { Nome = "Ana Costa", NIF = "123456789" };
+        _context.Clientes.Add(cliente);
+        await _context.SaveChangesAsync();
+        _context.Equipamentos.Add(new Equipamento
+        {
+            ClienteId = cliente.Id,
+            TipoEquipamento = "Laptop",
+            Marca = "Dell",
+            Modelo = "Latitude",
+            NumeroSerie = "ABC123"
+        });
+        await _context.SaveChangesAsync();
+
+        var controller = new EquipamentosController(_context);
+        var duplicate = new Equipamento
+        {
+            ClienteId = cliente.Id,
+            TipoEquipamento = "Desktop",
+            Marca = "Dell",
+            Modelo = "OptiPlex",
+            NumeroSerie = " ABC123 "
+        };
+
+        var result = await controller.Create(duplicate);
+
+        Assert.IsType<ViewResult>(result);
+        Assert.Contains(controller.ModelState[nameof(Equipamento.NumeroSerie)]!.Errors,
+            error => error.ErrorMessage == "Já existe um equipamento com este número de série.");
+        Assert.Single(await _context.Equipamentos.ToListAsync());
+    }
+
+    [Fact]
     public async Task RepairCreateSavesRepairForExistingEquipment()
     {
         var cliente = new Cliente { Nome = "Ana Costa", NIF = "123456789" };
@@ -248,6 +282,8 @@ public sealed class ByteFixTests : IDisposable
 
         Assert.Equal(1, model.TotalClientes);
         Assert.Equal(1, model.TotalEquipamentos);
+        Assert.Equal(1, model.ReparacoesFinalizadas);
+        Assert.Equal(1, model.ReparacoesPorConcluir);
         Assert.Equal(1, model.ReparacoesAguardarPecas);
         Assert.Equal(1, model.ReparacoesConcluidas);
         Assert.Contains(model.ReparacoesPorEstado, x => x.Rotulo == ReparacaoEstado.AguardarPecas && x.Valor == 1);
