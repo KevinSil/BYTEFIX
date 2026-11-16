@@ -1,4 +1,5 @@
 @model DashboardViewModel
+@using System.Globalization
 @{
     ViewData["Title"] = "Dashboard";
     ViewData["Section"] = "Visão geral";
@@ -6,6 +7,14 @@
     var reparacoesPorConcluir = Model.ReparacoesPorConcluir ?? 0;
     var totalReparacoes = reparacoesFinalizadas + reparacoesPorConcluir;
     var percentagemFinalizada = totalReparacoes == 0 ? 0 : (int)Math.Round(reparacoesFinalizadas * 100d / totalReparacoes);
+    var reparacoesEstadoMax = Model.ReparacoesPorEstado.Select(item => item.Valor).DefaultIfEmpty(0).Max();
+    var reparacoesMensais = Model.ReparacoesMensais.TakeLast(12).ToList();
+    var reparacoesMensaisMax = reparacoesMensais.Select(item => item.Valor).DefaultIfEmpty(0).Max();
+    var evolucaoCustos = Model.EvolucaoCustos.TakeLast(12).ToList();
+    var custoMax = evolucaoCustos
+        .SelectMany(item => new[] { item.CustoMaoObra, item.CustoPecas })
+        .DefaultIfEmpty(0m)
+        .Max();
 }
 
 <div class="page-header page-heading">
@@ -76,11 +85,10 @@
     {
         <div class="repair-progress-content">
             <div class="repair-progress-chart">
-                <canvas id="repair-progress-chart"
-                        data-finished="@reparacoesFinalizadas"
-                        data-pending="@reparacoesPorConcluir"
-                        aria-label="@reparacoesFinalizadas reparações finalizadas e @reparacoesPorConcluir por concluir"
-                        role="img"></canvas>
+                <div class="repair-progress-donut"
+                     style="background: conic-gradient(#4c9870 0 @percentagemFinalizada%, #df735d @percentagemFinalizada% 100%)"
+                     aria-label="@reparacoesFinalizadas reparações finalizadas e @reparacoesPorConcluir por concluir"
+                     role="img"></div>
                 <strong class="repair-progress-center">@percentagemFinalizada%</strong>
             </div>
             <div class="repair-progress-details">
@@ -129,9 +137,13 @@
             <ul class="list-unstyled chart-list">
                 @foreach (var item in Model.ReparacoesPorEstado)
                 {
+                    var largura = reparacoesEstadoMax == 0 ? 0 : item.Valor * 100d / reparacoesEstadoMax;
                     <li class="chart-row">
                         <span>@item.Rotulo</span>
                         <strong>@item.Valor</strong>
+                        <div class="chart-track" role="img" aria-label="@item.Valor reparações">
+                            <span class="chart-bar chart-bar-state" style="width: @largura.ToString("0.#", CultureInfo.InvariantCulture)%"></span>
+                        </div>
                     </li>
                 }
             </ul>
@@ -153,14 +165,18 @@
             </div>
             <i class="ti ti-chart-line panel-heading-icon"></i>
         </div>
-        @if (Model.ReparacoesMensais.Any())
+        @if (reparacoesMensais.Any())
         {
             <ul class="list-unstyled chart-list">
-                @foreach (var item in Model.ReparacoesMensais)
+                @foreach (var item in reparacoesMensais)
                 {
+                    var largura = reparacoesMensaisMax == 0 ? 0 : item.Valor * 100d / reparacoesMensaisMax;
                     <li class="chart-row">
                         <span>@item.Rotulo</span>
                         <strong>@item.Valor</strong>
+                        <div class="chart-track" role="img" aria-label="@item.Valor reparações">
+                            <span class="chart-bar chart-bar-month" style="width: @largura.ToString("0.#", CultureInfo.InvariantCulture)%"></span>
+                        </div>
                     </li>
                 }
             </ul>
@@ -182,14 +198,26 @@
             </div>
             <i class="ti ti-chart-bar panel-heading-icon"></i>
         </div>
-        @if (Model.EvolucaoCustos.Any())
+        @if (evolucaoCustos.Any())
         {
-            <ul class="list-unstyled chart-list">
-                @foreach (var item in Model.EvolucaoCustos)
+            <div class="chart-legend" aria-label="Legenda">
+                <span><i class="chart-legend-swatch chart-bar-labor"></i>Mão de obra</span>
+                <span><i class="chart-legend-swatch chart-bar-parts"></i>Peças</span>
+            </div>
+            <ul class="list-unstyled chart-list cost-chart-list">
+                @foreach (var item in evolucaoCustos)
                 {
-                    <li class="chart-row">
-                        <span>@item.Periodo</span>
-                        <strong>@item.CustoMaoObra.ToString("C2") / @item.CustoPecas.ToString("C2")</strong>
+                    var larguraMaoObra = custoMax == 0 ? 0 : (double)(item.CustoMaoObra * 100m / custoMax);
+                    var larguraPecas = custoMax == 0 ? 0 : (double)(item.CustoPecas * 100m / custoMax);
+                    <li class="cost-chart-row">
+                        <div class="chart-row">
+                            <span>@item.Periodo</span>
+                            <strong>@item.CustoMaoObra.ToString("C2") / @item.CustoPecas.ToString("C2")</strong>
+                        </div>
+                        <div class="chart-track" role="img" aria-label="Mão de obra: @item.CustoMaoObra.ToString("C2"); peças: @item.CustoPecas.ToString("C2")">
+                            <span class="chart-bar chart-bar-labor" style="width: @larguraMaoObra.ToString("0.#", CultureInfo.InvariantCulture)%"></span>
+                            <span class="chart-bar chart-bar-parts" style="width: @larguraPecas.ToString("0.#", CultureInfo.InvariantCulture)%"></span>
+                        </div>
                     </li>
                 }
             </ul>
@@ -258,38 +286,3 @@
         }
     </article>
 </section>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
-    <script>
-        const progressCanvas = document.getElementById("repair-progress-chart");
-        if (progressCanvas) {
-            new Chart(progressCanvas, {
-                type: "doughnut",
-                data: {
-                    labels: ["Feitas", "Por fazer"],
-                    datasets: [{
-                        data: [Number(progressCanvas.dataset.finished), Number(progressCanvas.dataset.pending)],
-                        backgroundColor: ["#4c9870", "#df735d"],
-                        borderColor: ["#f6faf5", "#f6faf5"],
-                        borderWidth: 4,
-                        hoverOffset: 7
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: "76%",
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: context => ` ${context.label}: ${context.raw}`
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    </script>
-}

@@ -2,9 +2,7 @@
 
 ## Organização
 
-O dashboard previsto tem uma barra superior com pesquisa (reservada à Fase 2), navegação lateral, cartões de indicadores, painéis de gráficos, atividade recente e alertas. A estrutura visual é responsiva e usa Bootstrap 5 e Tabler UI.
-
-Nesta fase os indicadores e gráficos não são calculados: os cartões mostram um marcador neutro, sem números fictícios. Os ViewModels definem os tipos de dados de destino e as coleções começam vazias. O dashboard não é preenchido com dados de demonstração.
+O dashboard apresenta navegação lateral, cartões de indicadores, gráficos, atividade recente e alertas. Os valores são consultados na base SQLite, sem dados de demonstração. Os gráficos são desenhados com CSS para continuarem visíveis sem depender de bibliotecas JavaScript externas.
 
 ## Indicadores
 
@@ -24,6 +22,7 @@ As contagens são anuláveis para distinguir um indicador ainda não calculado d
 - **Reparações por estado:** `ReparacoesPorEstado`, pontos com rótulo e contagem a agrupar pelo estado persistido.
 - **Reparações mensais:** `ReparacoesMensais`, pontos com período e contagem pela data de entrada.
 - **Evolução dos custos:** `EvolucaoCustos`, pontos por período, agregando custos de mão de obra e peças das intervenções. Os custos são `decimal` em euros no modelo e persistidos como cêntimos inteiros.
+- **Progresso das reparações:** gráfico circular de reparações finalizadas e por concluir.
 
 ## Atividade recente
 

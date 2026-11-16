@@ -507,6 +507,85 @@ h2,
     font-size: 19px;
 }
 
+.chart-list {
+    display: grid;
+    gap: 13px;
+    margin: 18px 0 0;
+}
+
+.chart-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 7px 12px;
+    color: #526a60;
+    font-size: 12px;
+}
+
+.chart-row strong {
+    color: #294d3f;
+    font-variant-numeric: tabular-nums;
+}
+
+.chart-track {
+    display: flex;
+    grid-column: 1 / -1;
+    height: 9px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e4ece5;
+}
+
+.chart-bar {
+    display: block;
+    height: 100%;
+    min-width: 0;
+    border-radius: inherit;
+}
+
+.chart-bar-state,
+.chart-bar-labor {
+    background: #4c9870;
+}
+
+.chart-bar-month {
+    background: #4b9cab;
+}
+
+.chart-bar-parts {
+    background: #df735d;
+}
+
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 16px;
+    color: #526a60;
+    font-size: 11px;
+}
+
+.chart-legend > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chart-legend-swatch {
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+}
+
+.cost-chart-list {
+    margin-top: 14px;
+}
+
+.cost-chart-row {
+    display: grid;
+    gap: 7px;
+}
+
 .repair-progress-panel {
     margin-top: 22px;
 }
@@ -526,14 +605,24 @@ h2,
     margin: 0 auto;
 }
 
-.repair-progress-chart canvas {
+.repair-progress-donut {
     position: absolute;
     inset: 0;
+    border-radius: 50%;
+}
+
+.repair-progress-donut::after {
+    position: absolute;
+    inset: 22%;
+    border-radius: 50%;
+    background: #f6faf5;
+    content: "";
 }
 
 .repair-progress-center {
     position: absolute;
     inset: 0;
+    z-index: 1;
     display: grid;
     place-items: center;
     color: #294d3f;
