@@ -10,6 +10,7 @@ public sealed class Equipamento
     public int Id { get; set; }
 
     [Required]
+    // Chave estrangeira do cliente proprietário do equipamento.
     public int ClienteId { get; set; }
 
     [Required, StringLength(80)]
@@ -29,8 +30,10 @@ public sealed class Equipamento
 
     public DateTime DataRegisto { get; set; } = DateTime.UtcNow;
 
+    // Propriedade carregada pelo EF Core; não é submetida diretamente pelo formulário.
     [ValidateNever]
     public Cliente Cliente { get; set; } = null!;
 
+    // Histórico das reparações realizadas neste equipamento.
     public ICollection<Reparacao> Reparacoes { get; set; } = new List<Reparacao>();
 }

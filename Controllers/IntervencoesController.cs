@@ -19,6 +19,7 @@ public sealed class IntervencoesController : Controller
 
     public async Task<IActionResult> Index()
     {
+        // Carrega as relações necessárias para identificar a reparação e o equipamento em cada linha.
         var intervencoes = await _context.Intervencoes
             .Include(i => i.Reparacao)
             .ThenInclude(r => r.Equipamento)
@@ -30,6 +31,7 @@ public sealed class IntervencoesController : Controller
 
     public async Task<IActionResult> Create()
     {
+        // Disponibiliza reparações existentes para o campo de seleção do formulário.
         ViewBag.Reparacoes = await _context.Reparacoes
             .Include(r => r.Equipamento)
             .ThenInclude(e => e.Cliente)
@@ -44,6 +46,7 @@ public sealed class IntervencoesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Intervencao intervencao)
     {
+        // Confirma que a intervenção fica ligada a uma reparação existente.
         if (!ModelState.IsValid)
         {
             await PrepareSelectLists();
@@ -57,6 +60,7 @@ public sealed class IntervencoesController : Controller
             return View(intervencao);
         }
 
+        // Regista a data no servidor para manter a cronologia consistente.
         intervencao.DataIntervencao = DateTime.UtcNow;
         _context.Intervencoes.Add(intervencao);
         await _context.SaveChangesAsync();
@@ -96,6 +100,7 @@ public sealed class IntervencoesController : Controller
             return NotFound();
         }
 
+        // Atualiza os campos do trabalho, sem alterar a data original da intervenção.
         entity.ReparacaoId = intervencao.ReparacaoId;
         entity.DescricaoTrabalho = intervencao.DescricaoTrabalho;
         entity.PecasUtilizadas = intervencao.PecasUtilizadas;
@@ -140,6 +145,7 @@ public sealed class IntervencoesController : Controller
 
     private async Task PrepareSelectLists()
     {
+        // Mantém a lista de reparações disponível caso seja necessário voltar ao formulário.
         ViewBag.Reparacoes = await _context.Reparacoes
             .Include(r => r.Equipamento)
             .ThenInclude(e => e.Cliente)

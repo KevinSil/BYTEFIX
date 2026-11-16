@@ -10,6 +10,7 @@ public sealed class Intervencao
     public int Id { get; set; }
 
     [Required]
+    // Cada intervenção pertence a uma reparação existente.
     public int ReparacaoId { get; set; }
 
     public DateTime DataIntervencao { get; set; } = DateTime.UtcNow;
@@ -21,8 +22,10 @@ public sealed class Intervencao
     public string? PecasUtilizadas { get; set; }
 
     [Range(typeof(decimal), "0", "1000000")]
+    // O tempo é registado em horas e não pode ser negativo.
     public decimal TempoTrabalho { get; set; }
 
+    // Os custos em euros têm limites de validação e são persistidos como cêntimos inteiros.
     [Range(0d, 99999999.99d)]
     public decimal CustoMaoObra { get; set; }
 

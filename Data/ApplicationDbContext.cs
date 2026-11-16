@@ -20,6 +20,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
         modelBuilder.Entity<Cliente>(entity =>
         {
+            // O NIF identifica cada cliente e clientes com equipamentos não podem ser apagados.
             entity.HasIndex(cliente => cliente.NIF).IsUnique();
             entity.HasMany(cliente => cliente.Equipamentos)
                 .WithOne(equipamento => equipamento.Cliente)
@@ -29,6 +30,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
         modelBuilder.Entity<Equipamento>(entity =>
         {
+            // O número de série é único quando está preenchido; vários equipamentos podem não o ter.
             entity.HasIndex(equipamento => equipamento.NumeroSerie)
                 .IsUnique()
                 .HasFilter("\"NumeroSerie\" IS NOT NULL");
@@ -40,6 +42,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
         modelBuilder.Entity<Tecnico>(entity =>
         {
+            // Evita contas de técnico duplicadas e protege reparações associadas.
             entity.HasIndex(tecnico => tecnico.Email).IsUnique();
             entity.HasMany(tecnico => tecnico.Reparacoes)
                 .WithOne(reparacao => reparacao.Tecnico)
@@ -49,6 +52,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
         modelBuilder.Entity<Reparacao>(entity =>
         {
+            // Restringe na própria base de dados os estados suportados pela aplicação.
             var estadosPermitidos = string.Join(", ", ReparacaoEstado.Todos.Select(estado =>
                 $"'{estado.Replace("'", "''")}'"));
 
@@ -63,6 +67,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
         modelBuilder.Entity<Intervencao>(entity =>
         {
+            // SQLite guarda estes valores em cêntimos/centésimos inteiros para evitar erros de arredondamento.
             entity.Property(intervencao => intervencao.TempoTrabalho)
                 .HasConversion<long>(
                     horas => decimal.ToInt64(decimal.Round(horas * 100m, 0, MidpointRounding.ToEven)),

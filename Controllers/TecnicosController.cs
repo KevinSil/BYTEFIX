@@ -39,6 +39,7 @@ public sealed class TecnicosController : Controller
             return View(tecnico);
         }
 
+        // Persiste o técnico validado e regressa à listagem para confirmar o resultado.
         _context.Tecnicos.Add(tecnico);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
@@ -75,6 +76,7 @@ public sealed class TecnicosController : Controller
             return NotFound();
         }
 
+        // Atualiza os dados editáveis na entidade rastreada pelo EF Core.
         entity.Nome = tecnico.Nome;
         entity.Email = tecnico.Email;
         entity.Telefone = tecnico.Telefone;
@@ -106,6 +108,7 @@ public sealed class TecnicosController : Controller
             return NotFound();
         }
 
+        // Preserva o histórico técnico: técnicos associados a reparações não podem ser eliminados.
         if (tecnico.Reparacoes.Any())
         {
             TempData["Error"] = "Não é possível eliminar um técnico com reparações associadas.";

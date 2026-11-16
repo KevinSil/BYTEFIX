@@ -507,6 +507,7 @@ h2,
     font-size: 19px;
 }
 
+/* As barras representam proporções dos dados reais calculados no dashboard. */
 .chart-list {
     display: grid;
     gap: 13px;
@@ -605,6 +606,7 @@ h2,
     margin: 0 auto;
 }
 
+/* O centro recortado transforma o gradiente cónico num gráfico circular. */
 .repair-progress-donut {
     position: absolute;
     inset: 0;

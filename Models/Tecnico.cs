@@ -20,7 +20,9 @@ public sealed class Tecnico
     [StringLength(120)]
     public string? Especialidade { get; set; }
 
+    // Técnicos inativos permanecem no histórico, mas deixam de estar disponíveis para atribuição.
     public bool Ativo { get; set; } = true;
 
+    // Reparações atribuídas ao técnico.
     public ICollection<Reparacao> Reparacoes { get; set; } = new List<Reparacao>();
 }

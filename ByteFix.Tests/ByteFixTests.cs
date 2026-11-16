@@ -18,6 +18,7 @@ public sealed class ByteFixTests : IDisposable
 
     public ByteFixTests()
     {
+        // Cada teste usa SQLite em memória para exercitar as regras relacionais sem alterar a base real.
         _connection = new SqliteConnection("Data Source=:memory:");
         _connection.Open();
 

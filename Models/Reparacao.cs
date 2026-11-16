@@ -10,6 +10,7 @@ public sealed class Reparacao
     public int Id { get; set; }
 
     [Required]
+    // Equipamento associado; o técnico é opcional para permitir triagem antes da atribuição.
     public int EquipamentoId { get; set; }
 
     public int? TecnicoId { get; set; }
@@ -23,6 +24,7 @@ public sealed class Reparacao
     public string? Diagnostico { get; set; }
 
     [Required, StringLength(40)]
+    // Usa os valores centralizados em ReparacaoEstado para manter o vocabulário consistente.
     public string Estado { get; set; } = ReparacaoEstado.AguardarDiagnostico;
 
     public DateTime? DataConclusao { get; set; }
@@ -32,6 +34,7 @@ public sealed class Reparacao
     [StringLength(2000)]
     public string? Observacoes { get; set; }
 
+    // Relações carregadas pelo EF Core, não valores enviados diretamente pelo formulário.
     [ValidateNever]
     public Equipamento Equipamento { get; set; } = null!;
 

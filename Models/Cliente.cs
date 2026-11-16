@@ -14,6 +14,7 @@ public sealed class Cliente
     [Required, RegularExpression(@"^\d{9}$"), StringLength(9, MinimumLength = 9)]
     public string NIF { get; set; } = string.Empty;
 
+    // Os restantes dados de contacto são opcionais, mas limitados para validar a entrada.
     [EmailAddress, StringLength(254)]
     public string? Email { get; set; }
 
@@ -31,5 +32,6 @@ public sealed class Cliente
 
     public DateTime DataRegisto { get; set; } = DateTime.UtcNow;
 
+    // Relação um-para-muitos: um cliente pode ter vários equipamentos.
     public ICollection<Equipamento> Equipamentos { get; set; } = new List<Equipamento>();
 }

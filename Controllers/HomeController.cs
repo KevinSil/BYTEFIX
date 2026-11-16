@@ -19,6 +19,7 @@ public sealed class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
+        // Calcula os indicadores diretamente dos registos persistidos, sem dados de demonstração.
         var totalClientes = await _context.Clientes.CountAsync();
         var totalEquipamentos = await _context.Equipamentos.CountAsync();
         var totalTecnicosAtivos = await _context.Tecnicos.CountAsync(t => t.Ativo);
@@ -34,6 +35,7 @@ public sealed class HomeController : Controller
             .Select(g => new { Rotulo = g.Key, Valor = g.Count() })
             .OrderBy(x => x.Rotulo)
             .ToListAsync();
+        // Considera concluídas e entregues como finalizadas para o resumo do progresso.
         var reparacoesFinalizadas = reparacoesPorEstado
             .Where(x => x.Rotulo == ReparacaoEstado.Concluida || x.Rotulo == ReparacaoEstado.EntregueAoCliente)
             .Sum(x => x.Valor);
@@ -51,6 +53,7 @@ public sealed class HomeController : Controller
             .ThenBy(x => x.Mes)
             .ToListAsync();
 
+        // Agrupa custos por mês; o modelo converte os valores persistidos em cêntimos para euros.
         var evolucaoCustos = await _context.Intervencoes
             .GroupBy(i => new { i.DataIntervencao.Year, i.DataIntervencao.Month })
             .Select(g => new

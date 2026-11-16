@@ -19,6 +19,7 @@ public sealed class ReparacoesController : Controller
 
     public async Task<IActionResult> Index()
     {
+        // Inclui os dados associados para mostrar equipamento e técnico sem consultas adicionais na vista.
         var reparacoes = await _context.Reparacoes
             .Include(r => r.Equipamento)
             .Include(r => r.Tecnico)
@@ -30,6 +31,7 @@ public sealed class ReparacoesController : Controller
 
     public async Task<IActionResult> Create()
     {
+        // Prepara as opções necessárias aos campos de seleção do formulário.
         ViewBag.Equipamentos = await _context.Equipamentos
             .Include(e => e.Cliente)
             .OrderBy(e => e.Cliente.Nome)
@@ -48,6 +50,7 @@ public sealed class ReparacoesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Reparacao reparacao)
     {
+        // Valida as chaves estrangeiras contra registos existentes antes de persistir.
         if (!ModelState.IsValid)
         {
             await PrepareSelectLists();
@@ -68,6 +71,7 @@ public sealed class ReparacoesController : Controller
             return View(reparacao);
         }
 
+        // A data de entrada é controlada pelo servidor, não pelo formulário.
         reparacao.DataEntrada = DateTime.UtcNow;
         _context.Reparacoes.Add(reparacao);
         await _context.SaveChangesAsync();
@@ -107,6 +111,7 @@ public sealed class ReparacoesController : Controller
             return NotFound();
         }
 
+        // Copia apenas os campos editáveis para a entidade já monitorizada pelo EF Core.
         entity.EquipamentoId = reparacao.EquipamentoId;
         entity.TecnicoId = reparacao.TecnicoId;
         entity.DescricaoAvaria = reparacao.DescricaoAvaria;
@@ -148,6 +153,7 @@ public sealed class ReparacoesController : Controller
             return NotFound();
         }
 
+        // Preserva o histórico e impede apagar uma reparação com trabalho registado.
         if (reparacao.Intervencoes.Any())
         {
             TempData["Error"] = "Não é possível eliminar uma reparação com intervenções associadas.";
@@ -161,6 +167,7 @@ public sealed class ReparacoesController : Controller
 
     private async Task PrepareSelectLists()
     {
+        // Repõe todas as opções quando a validação devolve o formulário ao utilizador.
         ViewBag.Equipamentos = await _context.Equipamentos
             .Include(e => e.Cliente)
             .OrderBy(e => e.Cliente.Nome)

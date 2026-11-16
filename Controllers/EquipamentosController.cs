@@ -19,6 +19,7 @@ public sealed class EquipamentosController : Controller
 
     public async Task<IActionResult> Index()
     {
+        // Carrega o cliente relacionado para apresentar o nome na lista.
         var equipamentos = await _context.Equipamentos
             .Include(e => e.Cliente)
             .OrderBy(e => e.Marca)
@@ -30,6 +31,7 @@ public sealed class EquipamentosController : Controller
 
     public async Task<IActionResult> Create()
     {
+        // O formulário precisa da lista de clientes para guardar a respetiva chave estrangeira.
         await PrepareClientList();
 
         return View(new Equipamento());
@@ -39,6 +41,7 @@ public sealed class EquipamentosController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Equipamento equipamento)
     {
+        // Uniformiza o número de série antes da validação e da verificação de duplicados.
         equipamento.NumeroSerie = NormalizeSerialNumber(equipamento.NumeroSerie);
 
         if (!ModelState.IsValid)
@@ -54,6 +57,7 @@ public sealed class EquipamentosController : Controller
             return View(equipamento);
         }
 
+        // Deteta duplicados antes de persistir e apresenta a mensagem junto ao campo no formulário.
         if (equipamento.NumeroSerie is not null && await _context.Equipamentos.AnyAsync(e => e.NumeroSerie == equipamento.NumeroSerie))
         {
             ModelState.AddModelError(nameof(equipamento.NumeroSerie), "Já existe um equipamento com este número de série.");
@@ -117,6 +121,7 @@ public sealed class EquipamentosController : Controller
             return View(equipamento);
         }
 
+        // Atualiza apenas os campos editáveis e preserva o identificador e a data de registo.
         entity.ClienteId = equipamento.ClienteId;
         entity.TipoEquipamento = equipamento.TipoEquipamento;
         entity.Marca = equipamento.Marca;
@@ -130,6 +135,7 @@ public sealed class EquipamentosController : Controller
 
     private async Task PrepareClientList()
     {
+        // Reutiliza a mesma lista ao criar, editar ou voltar a apresentar um formulário inválido.
         ViewBag.Clientes = await _context.Clientes
             .OrderBy(c => c.Nome)
             .Select(c => new SelectListItem(c.Nome, c.Id.ToString()))
@@ -138,6 +144,7 @@ public sealed class EquipamentosController : Controller
 
     private static string? NormalizeSerialNumber(string? serialNumber)
     {
+        // Trata espaços ou texto vazio como ausência de número de série.
         var normalized = serialNumber?.Trim();
         return string.IsNullOrEmpty(normalized) ? null : normalized;
     }
@@ -169,6 +176,7 @@ public sealed class EquipamentosController : Controller
             return NotFound();
         }
 
+        // Protege o histórico: não elimina equipamentos referenciados por reparações.
         if (equipamento.Reparacoes.Any())
         {
             TempData["Error"] = "Não é possível eliminar um equipamento com reparações associadas.";

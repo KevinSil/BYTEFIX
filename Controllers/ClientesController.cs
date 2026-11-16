@@ -39,6 +39,7 @@ public sealed class ClientesController : Controller
             return View(cliente);
         }
 
+        // A data é definida no servidor para não depender de valores enviados pelo formulário.
         cliente.DataRegisto = DateTime.UtcNow;
         _context.Clientes.Add(cliente);
         await _context.SaveChangesAsync();
@@ -78,6 +79,7 @@ public sealed class ClientesController : Controller
                 return NotFound();
             }
 
+            // Atualiza apenas os campos editáveis e preserva os restantes dados do registo.
             entity.Nome = cliente.Nome;
             entity.NIF = cliente.NIF;
             entity.Email = cliente.Email;
@@ -90,6 +92,8 @@ public sealed class ClientesController : Controller
         }
         catch (DbUpdateConcurrencyException)
         {
+            // Se o registo foi removido entretanto, responde como não encontrado;
+            // caso contrário, deixa a exceção ser tratada pelo fluxo de erros da aplicação.
             if (!await _context.Clientes.AnyAsync(c => c.Id == id))
             {
                 return NotFound();
@@ -122,6 +126,7 @@ public sealed class ClientesController : Controller
             return NotFound();
         }
 
+        // Impede a eliminação de um cliente ainda referenciado por equipamentos.
         if (cliente.Equipamentos.Any())
         {
             TempData["Error"] = "Não é possível eliminar um cliente com equipamentos associados.";

@@ -10,6 +10,7 @@ public static class ReparacaoEstado
     public const string Concluida = "Concluída";
     public const string EntregueAoCliente = "Entregue ao cliente";
 
+    // Lista única usada pelos formulários e pela restrição CHECK da base de dados.
     public static readonly string[] Todos =
     [
         AguardarDiagnostico,
